@@ -92,6 +92,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
+  console.log(`${currentPlayer} Won!`);
   // TODO: pop up alert message
 }
 
@@ -99,7 +100,7 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  let x = +evt.target.id;
+  let x = +evt.target.id/*[2] */;
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
@@ -118,9 +119,14 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
-
+  let topRowArr = Array.from(document.querySelectorAll("tr")[1]);
+  if(topRowArr.every((cell) => {  //link to table tag
+    cell.classList.contains("piece");
+  })) endGame();
   // switch players
   // TODO: switch currentPlayer 1 <-> 2
+  currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
+  console.log(currentPlayer);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -131,6 +137,7 @@ function checkForWin() {
    * returns true if all are legal coordinates for a cell & all cells match
    * currentPlayer
    */
+
   function _win(cells) {
 
     //TODO: Check four cells to see if they're all legal & all color of current
