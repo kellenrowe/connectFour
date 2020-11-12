@@ -77,7 +77,13 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for (let i = board.length - 1; i >= 0; i--) {
+    if (!board[i][x]) {
+      // place piece there
+      return i;
+    }
+  }
+  // return 0;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -92,7 +98,7 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  console.log(`${currentPlayer} Won!`);
+  // console.log(`${currentPlayer} Won!`);
   // TODO: pop up alert message
 }
 
@@ -109,6 +115,9 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
+  
+  
+  board[y][x] = currentPlayer;
   // TODO: add line to update in-memory board
   placeInTable(y, x);
 
@@ -126,7 +135,7 @@ function handleClick(evt) {
   // switch players
   // TODO: switch currentPlayer 1 <-> 2
   currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
-  console.log(currentPlayer);
+  // console.log(currentPlayer);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
