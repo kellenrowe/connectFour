@@ -107,7 +107,7 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  let x = +evt.target.id/*[2] */;
+  let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
   let y = findSpotForCol(x);
@@ -124,7 +124,8 @@ function handleClick(evt) {
 
   // check for win
   if (checkForWin()) {
-    return endGame(`Player ${currentPlayer} won!`);
+    let alert = setTimeout(endGame, 200, `${currentPlayer} won!`);
+    return alert;
   }
 
   // check for tie
@@ -143,13 +144,13 @@ function handleClick(evt) {
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
 function checkForWin() {
-  /** _win:
+  /** legalMovePlayerMatch:
    * takes input array of 4 cell coordinates [ [y, x], [y, x], [y, x], [y, x] ]
    * returns true if all are legal coordinates for a cell & all cells match
    * currentPlayer
    */
-  function _win(cells) {
-    console.log(cells);
+  function legalMovePlayerMatch(cells) {
+    // console.log(cells);
     for(let [y, x] of cells){
       if((y < 0 || y > HEIGHT - 1 )||( x < 0 || x > WIDTH - 1)){
         return false;
@@ -177,7 +178,7 @@ function checkForWin() {
       let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
-      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      if (legalMovePlayerMatch(horiz) || legalMovePlayerMatch(vert) || legalMovePlayerMatch(diagDR) || legalMovePlayerMatch(diagDL)) {
         return true;
       }
     }
