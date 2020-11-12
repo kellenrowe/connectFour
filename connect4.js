@@ -18,7 +18,7 @@
 const WIDTH = 7;
 const HEIGHT = 6;
 
-let currPlayer = 1; // active player: 1 or 2
+let currentPlayer = "player1"; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
 
 
@@ -26,9 +26,9 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 function makeBoard() {
-  for (let row = 0; row < HEIGHT; row++) {
+  for (let y = 0; y < HEIGHT; y++) {
     let rowArray = []
-    for (let column = 0; column < WIDTH; column++) {
+    for (let x = 0; x < WIDTH; x++) {
       rowArray.push(null);
     }
     board.push(rowArray);
@@ -39,16 +39,12 @@ function makeBoard() {
 /** makeHtmlBoard: make HTML table and row of column tops. */
 
 function makeHtmlBoard() {
-  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
   let htmlBoard = document.querySelector("#board");
-  // TODO: add comment for this code
   //create a tag for table row with an id of column-top, and
   //a click event listener for handling each turn
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
-
-  // TODO: add comment for this code
   //create columns with id of x and append to the corresponding row.
   for (let x = 0; x < WIDTH; x++) {
     let headCell = document.createElement("td");
@@ -57,21 +53,18 @@ function makeHtmlBoard() {
   }
   //append rows to the board
   htmlBoard.append(top);
-
   // dynamically creates the main part of html board
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
   for (let y = 0; y < HEIGHT; y++) {
     // TODO: Create a table row element and assign to a "row" variable
     let tableRow = document.createElement("tr");
-
     for (let x = 0; x < WIDTH; x++) {
       // TODO: Create a table cell element and assign to a "cell" variable
       let tableCell = document.createElement("td");
       // TODO: add an id, y-x, to the above table cell element
-      tableCell.setAttribute("id", "y-x");
+      tableCell.setAttribute("id", `${y}-${x}`);
       // you'll use this later, so make sure you use y-x
-
       // TODO: append the table cell to the table row
       tableRow.append(tableCell);
     }
@@ -91,6 +84,9 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let newPiece = document.createElement('div');
+  newPiece.classList.add('piece', `${currentPlayer}`);
+  document.getElementById(`${y}-${x}`).append(newPiece);
 }
 
 /** endGame: announce game end */
@@ -117,14 +113,14 @@ function handleClick(evt) {
 
   // check for win
   if (checkForWin()) {
-    return endGame(`Player ${currPlayer} won!`);
+    return endGame(`Player ${currentPlayer} won!`);
   }
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
 
   // switch players
-  // TODO: switch currPlayer 1 <-> 2
+  // TODO: switch currentPlayer 1 <-> 2
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -133,7 +129,7 @@ function checkForWin() {
   /** _win:
    * takes input array of 4 cell coordinates [ [y, x], [y, x], [y, x], [y, x] ]
    * returns true if all are legal coordinates for a cell & all cells match
-   * currPlayer
+   * currentPlayer
    */
   function _win(cells) {
 
