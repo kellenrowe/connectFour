@@ -100,6 +100,7 @@ function placeInTable(y, x) {
 function endGame(msg) {
   // console.log(`${currentPlayer} Won!`);
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -129,9 +130,10 @@ function handleClick(evt) {
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
   let topRowArr = Array.from(document.querySelectorAll("tr")[1]);
-  if(topRowArr.every((cell) => {  //link to table tag
-    cell.classList.contains("piece");
-  })) endGame();
+  console.log(topRowArr);
+  if (board[0].every(function (cell) {
+    cell !== null;
+  })) endGame("Game Over, nobody wins - You're all losers.");
   // switch players
   // TODO: switch currentPlayer 1 <-> 2
   currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
@@ -171,11 +173,11 @@ function checkForWin() {
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
       let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      // let diagDL;
-      // let diagDR;
+      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
-      if (_win(horiz) || _win(vert) /*|| _win(diagDR) || _win(diagDL)*/) {
+      if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
       }
     }
