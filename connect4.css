@@ -17,11 +17,11 @@
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */
-.player1 {
+.red {
   background-color: red;
 }
 
-.player2 {
+.blue {
   background-color: blue;
 }
 

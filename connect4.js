@@ -18,22 +18,24 @@
 const WIDTH = 7;
 const HEIGHT = 6;
 
-let currentPlayer = "player1"; // active player: 1 or 2
+let currentPlayer = "red"; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
-
 
 /** makeBoard: create in-JS board structure:
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
+
+ // test this
 function makeBoard() {
+  board = []
   for (let y = 0; y < HEIGHT; y++) {
-    let rowArray = []
+    let rowArray = [];
     for (let x = 0; x < WIDTH; x++) {
       rowArray.push(null);
     }
     board.push(rowArray);
   }
-  console.log(board)
+  return board;
 }
 
 /** makeHtmlBoard: make HTML table and row of column tops. */
@@ -57,27 +59,22 @@ function makeHtmlBoard() {
   // uses HEIGHT to create table rows
   // uses WIDTH to create table cells for each row
   for (let y = 0; y < HEIGHT; y++) {
-    // TODO: Create a table row element and assign to a "row" variable
     let tableRow = document.createElement("tr");
     for (let x = 0; x < WIDTH; x++) {
-      // TODO: Create a table cell element and assign to a "cell" variable
       let tableCell = document.createElement("td");
-      // TODO: add an id, y-x, to the above table cell element
       tableCell.setAttribute("id", `${y}-${x}`);
       // you'll use this later, so make sure you use y-x
-      // TODO: append the table cell to the table row
       tableRow.append(tableCell);
     }
-    // TODO: append the row to the html board
     htmlBoard.append(tableRow);
   }
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
+// test this for return ycoord or null
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
-  for (let yCoord = board.length - 1; yCoord >= 0; yCoord--) {
+  for (let yCoord = HEIGHT - 1; yCoord >= 0; yCoord--) {
     if (!board[yCoord][x]) {
       // place piece there
       return yCoord;
@@ -89,17 +86,16 @@ function findSpotForCol(x) {
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
-  let newPiece = document.createElement('div');
-  newPiece.classList.add('piece', `${currentPlayer}`);
+  let newPiece = document.createElement("div");
+  newPiece.classList.add("piece", `${currentPlayer}`);
   document.getElementById(`${y}-${x}`).append(newPiece);
 }
 
 /** endGame: announce game end */
 
+//test this
 function endGame(msg) {
   // console.log(`${currentPlayer} Won!`);
-  // TODO: pop up alert message
   alert(msg);
 }
 
@@ -116,49 +112,43 @@ function handleClick(evt) {
   }
 
   // place piece in board and add to HTML table
-  
-  
+
   board[y][x] = currentPlayer;
-  // TODO: add line to update in-memory board
   placeInTable(y, x);
 
   // check for win
   if (checkForWin()) {
-    let alert = setTimeout(endGame, 200, `${currentPlayer} won!`);
-    return alert;
+    setTimeout(endGame, 200, `${currentPlayer} player wins!`);
+    return;
   }
 
   // check for tie
-  // TODO: check if all cells in board are filled; if so call, call endGame
-  let topRowArr = Array.from(document.querySelectorAll("tr")[1]);
-  console.log(topRowArr);
-  if (board[0].every(function (cell) {
-    cell !== null;
-  })) endGame("Game Over, nobody wins - You're all losers.");
+  let rowIsFull = board[0].every(cell => cell !== null);
+  if (rowIsFull) {
+    endGame("Game Over, nobody wins - You're all losers.");
+  }
   // switch players
-  // TODO: switch currentPlayer 1 <-> 2
-  currentPlayer = (currentPlayer === 'player1') ? 'player2' : 'player1';
+  currentPlayer = currentPlayer === "red" ? "blue" : "red";
   console.log(currentPlayer);
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 
 function checkForWin() {
-  /** legalMovePlayerMatch:
+  /** _win:
    * takes input array of 4 cell coordinates [ [y, x], [y, x], [y, x], [y, x] ]
    * returns true if all are legal coordinates for a cell & all cells match
    * currentPlayer
    */
-  function legalMovePlayerMatch(cells) {
+  function _win(cells) {
     // console.log(cells);
-    for(let [y, x] of cells){
-      if((y < 0 || y > HEIGHT - 1 )||( x < 0 || x > WIDTH - 1)){
+    //**** make variable here ******/
+    for (let [y, x] of cells) {
+      if (y < 0 || y > HEIGHT - 1 || x < 0 || x > WIDTH - 1) {
         return false;
       }
-      if(board[y][x] !== currentPlayer) return false;
+      if (board[y][x] !== currentPlayer) return false;
     }
-    //TODO: Check four cells to see if they're all legal & all color of current
-    //player
     return true;
   }
 
@@ -167,18 +157,42 @@ function checkForWin() {
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
   for (let y = 0; y < HEIGHT; y++) {
     for (let x = 0; x < WIDTH; x++) {
-      // TODO: assign values to the below variables for each of the ways to win
       // horizontal has been assigned for you
       // each should be an array of 4 cell coordinates:
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
-      let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
-      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      let horiz = [
+        [y, x],
+        [y, x + 1],
+        [y, x + 2],
+        [y, x + 3],
+      ];
+      let vert = [
+        [y, x],
+        [y + 1, x],
+        [y + 2, x],
+        [y + 3, x],
+      ];
+      let diagDL = [
+        [y, x],
+        [y + 1, x - 1],
+        [y + 2, x - 2],
+        [y + 3, x - 3],
+      ];
+      let diagDR = [
+        [y, x],
+        [y + 1, x + 1],
+        [y + 2, x + 2],
+        [y + 3, x + 3],
+      ];
 
       // find winner (only checking each win-possibility as needed)
-      if (legalMovePlayerMatch(horiz) || legalMovePlayerMatch(vert) || legalMovePlayerMatch(diagDR) || legalMovePlayerMatch(diagDL)) {
+      if (
+        _win(horiz) ||
+        _win(vert) ||
+        _win(diagDR) ||
+        _win(diagDL)
+      ) {
         return true;
       }
     }
