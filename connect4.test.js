@@ -1,6 +1,10 @@
 describe("makeBoard", function () {
-  it('should create a matrix based on HEIGHT/WIDTH input', function () {
-    expect(makeBoard().length).toEqual(6);
+  it('should create a matrix with columns based on WIDTH input', function () {
+    expect(makeBoard()[0].length).toEqual(WIDTH);
+  });
+
+  it('should create a matrix with rows based on HEIGHT input', function () {
+    expect(makeBoard().length).toEqual(HEIGHT);
   });
 
   // it('should create a matrix based on HEIGHT/WIDTH input', function () {
